@@ -1,5 +1,5 @@
 body {
-    background-color: black ;
+    background-color: grey !important;
     color: white ;
 }
 table {
@@ -8,7 +8,7 @@ table {
 
 td {
 	background-color: black;
-	border: 1px solid blue;
+	border: 2px solid blue;
 	color: white;
 	border-radius: 1px 1px 1px 1px;
     font-weight: 900;
