@@ -28,12 +28,9 @@ $(document).ready(function () {
             cell.classList.add('col' + j, 'row' + i);
             row.appendChild(cell);
             // top - right - bottom - left walls for each square
-            cell.walls = [1, 1, 1, 1];
             cell.visited = false;
             cell.position = cellIndex + j;
             cell.unvisitedCells = [];
-            //   cell.col = j;
-            // cell.row = i;
             cell.top = cell.position - N_SIZE;
             // checking edge positions for right
             if ((N_SIZE * i) + N_SIZE - 1 !== cell.position) {
@@ -46,51 +43,51 @@ $(document).ready(function () {
             }
             boxes.push(cell);
         }
-
     }
     document.getElementById("mazeGrid").appendChild(board);
     startMaze();
 });
 
-
-
-
 function startMaze() {
-    currentCell = boxes[4];
+    var randomStart = Math.floor(Math.random() * Math.floor(N_SIZE * N_SIZE));
+    currentCell = boxes[randomStart];
     currentCell.visited = true;
+    currentCell.innerHTML = "X";
     visitedCells.push(currentCell);
     currentCell.style.background = 'orange';
     unvisitedCells(currentCell);
 }
 
-
-
 function unvisitedCells(cell) {
-    var topCell = boxes[currentCell.top]
-    var rightCell = boxes[currentCell.right]
-    var bottomCell = boxes[currentCell.bottom]
-    var leftCell = boxes[currentCell.left]
-    
+    var topCell = boxes[currentCell.top];
+    var rightCell = boxes[currentCell.right];
+    var bottomCell = boxes[currentCell.bottom];
+    var leftCell = boxes[currentCell.left];
+    var randomNeighbor = Math.floor(Math.random() * Math.floor(4) + 1);
+
     // start backtracking if all currentcells neighbors have been visited
     if(visitedCells.length > 1 && topCell.visited && rightCell.visited && bottomCell.visited && leftCell.visited) {
         currentCell = visitedCells.pop();
     } else {
     // checking so the cells around the current cell are not DEFINED and not VISITED
-    if (topCell && !topCell.visited) {
+    if (topCell && !topCell.visited && randomNeighbor == 1) {
         setTimeout(function () {
+            currentCell.innerHTML = "";
             topCell.visited = true;
             topCell.style.background = "orange";
             // remove the top wall from the current cell
-
             currentCell.style.borderTop = "2px solid orange";
             // remove the bottom wall from the top cell of the current one
             topCell.style.borderBottom = "2px solid orange";
+            currentCell = topCell;
+            currentCell.innerHTML = "X";
             unvisitedCells(currentCell);
         }, 1000)
     }
     
-    if (rightCell && !rightCell.visited) {
+    if (rightCell && !rightCell.visited && randomNeighbor == 2) {
         setTimeout(function () {
+            currentCell.innerHTML = "";
             rightCell.visited = true;
             rightCell.style.background = "orange";
             // remove the right wall from the current cell
@@ -98,13 +95,14 @@ function unvisitedCells(cell) {
             // remove the left wall from the right cell of the current one
             rightCell.style.borderLeft = "2px solid orange";
             currentCell = rightCell;
-
+            currentCell.innerHTML = "X";
             unvisitedCells(currentCell);
         }, 2000)
     }
 
-    if (bottomCell && !bottomCell.visited) {
+   if (bottomCell && !bottomCell.visited) {
         setTimeout(function () {
+            currentCell.innerHTML = "";
             bottomCell.visited = true;
             bottomCell.style.background = "orange";
             // remove the bottom wall from the current cell
@@ -112,12 +110,14 @@ function unvisitedCells(cell) {
             // remove the top wall from the bottom cell of the current one
             bottomCell.style.borderTop = "2px solid orange";
             currentCell = bottomCell;
+            currentCell.innerHTML = "X";
             unvisitedCells(currentCell);
         }, 3000)
     }
 
-    if (leftCell && !leftCell.visited) {
+     if (leftCell && !leftCell.visited) {
         setTimeout(function () {
+            currentCell.innerHTML = "";
             leftCell.visited = true;
             leftCell.style.background = "orange";
             // remove the left wall from the current cell
@@ -125,6 +125,7 @@ function unvisitedCells(cell) {
             // remove the right wall from the left cell of the current one
             leftCell.style.borderRight = "2px solid orange";
             currentCell = leftCell;
+            currentCell.innerHTML = "X";
             unvisitedCells(currentCell);
         }, 4000)
     }
