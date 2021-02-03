@@ -1,3 +1,6 @@
+// inspired by Maze Generator Coding Challenge Playlist 1-4
+// https://www.youtube.com/watch?v=HyK_Q5rrcr4
+
 var N_SIZE = 10,
     boxes = [],
     visitedCells = [],
@@ -23,12 +26,9 @@ $(document).ready(function () {
             var cell = document.createElement('td');
             cell.setAttribute('height', 50);
             cell.setAttribute('width', 60);
-
             cell.setAttribute('align', 'center');
             cell.setAttribute('valign', 'center');
-            cell.classList.add('col' + j, 'row' + i);
             row.appendChild(cell);
-            // top - right - bottom - left walls for each square
             cell.visited = false;
             cell.position = cellIndex + j;
             cell.unvisitedCells = [];
