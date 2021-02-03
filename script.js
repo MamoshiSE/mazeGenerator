@@ -1,6 +1,7 @@
 var N_SIZE = 10,
     boxes = [],
-    visitedCells = []
+    visitedCells = [],
+    visitCount = 0;
 
 
 
@@ -31,16 +32,22 @@ $(document).ready(function () {
             cell.visited = false;
             cell.position = cellIndex + j;
             cell.unvisitedCells = [];
+            // checking edge positions for bottom
+             if (i !== 0) {
             cell.top = cell.position - N_SIZE;
+             } 
             // checking edge positions for right
             if ((N_SIZE * i) + N_SIZE - 1 !== cell.position) {
                 cell.right = cell.position + 1;
-            }
+            } 
+             // checking edge positions for bottom
+            if (i !== N_SIZE - 1) {
             cell.bottom = cell.position + N_SIZE;
+            } 
             // checking edge positions for left
             if (cell.position - (N_SIZE * i) !== 0) {
                 cell.left = cell.position - 1;
-            }
+            } 
             boxes.push(cell);
         }
     }
@@ -64,71 +71,125 @@ function unvisitedCells(cell) {
     var bottomCell = boxes[currentCell.bottom];
     var leftCell = boxes[currentCell.left];
     var randomNeighbor = Math.floor(Math.random() * Math.floor(4) + 1);
+    currentCell.innerHTML = "X";
+    var topVisited, rightVisited, bottomVisited, leftVisited;
 
-    // start backtracking if all currentcells neighbors have been visited
-    if(visitedCells.length > 1 && topCell.visited && rightCell.visited && bottomCell.visited && leftCell.visited) {
+// If neighbor cells are edge cases and undefined, setting them as visited     
+if(topCell == null) {
+   topVisited = true;
+} else {
+    topVisited = topCell.visited;
+}
+    if(rightCell == null) {
+   rightVisited = true;
+} else {
+    rightVisited = rightCell.visited;
+}
+    if(leftCell == null) {
+   leftVisited = true;
+} else {
+    leftVisited = leftCell.visited;
+}
+    
+if(bottomCell == null) {
+   bottomVisited = true;
+} else {
+    bottomVisited = bottomCell.visited;
+}
+    
+// keeping track of how many cells found, to stop at end    
+ if(visitCount == (N_SIZE * N_SIZE) - 1) {
+ console.log("Maze finished");
+}
+        // start backtracking if all current cells neighbors have been visited
+ else if(visitedCells.length > 0 && topVisited && rightVisited && bottomVisited && leftVisited) {
+    currentCell.innerHTML = "";
         currentCell = visitedCells.pop();
-    } else {
+        unvisitedCells(currentCell);
+}
+
     // checking so the cells around the current cell are not DEFINED and not VISITED
-    if (topCell && !topCell.visited && randomNeighbor == 1) {
+    else if(randomNeighbor == 1) {
+    if (topCell && !topCell.visited) {
         setTimeout(function () {
-            currentCell.innerHTML = "";
             topCell.visited = true;
             topCell.style.background = "orange";
             // remove the top wall from the current cell
             currentCell.style.borderTop = "2px solid orange";
             // remove the bottom wall from the top cell of the current one
             topCell.style.borderBottom = "2px solid orange";
+            currentCell.innerHTML = "";
             currentCell = topCell;
-            currentCell.innerHTML = "X";
+            visitCount++;
+            visitedCells.push(currentCell);
             unvisitedCells(currentCell);
-        }, 1000)
+        }, 250)
+    } else {
+        unvisitedCells(currentCell);
+    }
     }
     
-    if (rightCell && !rightCell.visited && randomNeighbor == 2) {
+    else if(randomNeighbor == 2) {
+     if (rightCell && !rightCell.visited) {
         setTimeout(function () {
-            currentCell.innerHTML = "";
             rightCell.visited = true;
             rightCell.style.background = "orange";
             // remove the right wall from the current cell
             currentCell.style.borderRight = "2px solid orange";
             // remove the left wall from the right cell of the current one
             rightCell.style.borderLeft = "2px solid orange";
-            currentCell = rightCell;
-            currentCell.innerHTML = "X";
-            unvisitedCells(currentCell);
-        }, 2000)
-    }
-
-   if (bottomCell && !bottomCell.visited) {
-        setTimeout(function () {
             currentCell.innerHTML = "";
+            currentCell = rightCell;
+            visitCount++;
+            visitedCells.push(currentCell);
+            unvisitedCells(currentCell);
+        }, 250)
+    } else {
+        unvisitedCells(currentCell);
+    }
+    }
+    else if(randomNeighbor == 3) {
+    if (bottomCell && !bottomCell.visited) {
+        setTimeout(function () {
             bottomCell.visited = true;
             bottomCell.style.background = "orange";
             // remove the bottom wall from the current cell
             currentCell.style.borderBottom = "2px solid orange";
             // remove the top wall from the bottom cell of the current one
             bottomCell.style.borderTop = "2px solid orange";
-            currentCell = bottomCell;
-            currentCell.innerHTML = "X";
-            unvisitedCells(currentCell);
-        }, 3000)
-    }
-
-     if (leftCell && !leftCell.visited) {
-        setTimeout(function () {
             currentCell.innerHTML = "";
+            currentCell = bottomCell;
+            visitCount++;
+            visitedCells.push(currentCell);
+            unvisitedCells(currentCell);
+        }, 250)
+    }
+    else {
+        unvisitedCells(currentCell);
+    }
+    }
+else if(randomNeighbor == 4) {
+      if (leftCell && !leftCell.visited) {
+        setTimeout(function () {
             leftCell.visited = true;
             leftCell.style.background = "orange";
             // remove the left wall from the current cell
             currentCell.style.borderLeft = "2px solid orange";
             // remove the right wall from the left cell of the current one
             leftCell.style.borderRight = "2px solid orange";
+            currentCell.innerHTML = "";
             currentCell = leftCell;
-            currentCell.innerHTML = "X";
+            visitCount++;
+            visitedCells.push(currentCell);
             unvisitedCells(currentCell);
-        }, 4000)
+        }, 250)
+      }
+   else {
+        unvisitedCells(currentCell);
     }
-    }
+    } 
+}
 
+function resetGame() {
+   location.reload();
 }
